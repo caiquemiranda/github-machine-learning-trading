@@ -12,11 +12,6 @@ def calculate_moving_average(data, window):
 def calculate_standard_deviation(data, window):
     return data['Close'].rolling(window=window).std()
 
-def calculate_cumulative_returns(data):
-    data['Returns'] = data['Close'].pct_change()
-    data['Cumulative_Returns'] = (data['Returns'] * data['Position']).cumsum()
-    return data['Cumulative_Returns']
-
 def trading_strategy(data, ma_window, num_std, stop_loss_percent):
     data['SMA'] = calculate_moving_average(data, ma_window)
     data['Upper_Band'] = data['SMA'] + (data['Close'].rolling(window=ma_window).std() * num_std)
@@ -46,6 +41,13 @@ def calculate_drawdown(data):
     data['Peak'] = data['Close'].cummax()
     data['Drawdown'] = (data['Peak'] - data['Close']) / data['Peak']
     return data['Drawdown']
+
+def calculate_cumulative_returns(data):
+    data['Returns'] = data['Close'].pct_change()
+    data['Position'] = 0  # Inicializa a coluna 'Position'
+    data_with_positions = trading_strategy(data, moving_average_window, num_standard_deviations, stop_loss_percent)
+    data['Cumulative_Returns'] = (data_with_positions['Returns'] * data_with_positions['Position']).cumsum()
+    return data['Cumulative_Returns']
 
 def plot_trading_signals(data):
     plt.plot(data.index, data['Close'], label='Preço de Fechamento', color='black')
