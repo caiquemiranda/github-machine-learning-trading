@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def download_historical_data(ticker, start_date, end_date):
     data = yf.download(ticker, start=start_date, end=end_date)
     tamanho_do_dataframe = 251
-    data['Cumulative_Returns'] = [random.randint(0, 100) for _ in range(tamanho_do_dataframe)]
+    data['Cumulative_Returns'] = [random.randint(0, 5) for _ in range(tamanho_do_dataframe)]
     return data
 
 def calculate_moving_average(data, window):
