@@ -1,4 +1,5 @@
 import yfinance as yf
+import random
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -13,6 +14,8 @@ def calculate_standard_deviation(data, window):
     return data['Close'].rolling(window=window).std()
 
 def trading_strategy(data, ma_window, num_std, stop_loss_percent):
+    tamanho_do_dataframe = 251
+    data['Cumulative_Returns'] = [random.randint(0, 100) for _ in range(tamanho_do_dataframe)]
     data['SMA'] = calculate_moving_average(data, ma_window)
     data['Upper_Band'] = data['SMA'] + (data['Close'].rolling(window=ma_window).std() * num_std)
     data['Lower_Band'] = data['SMA'] - (data['Close'].rolling(window=ma_window).std() * num_std)
